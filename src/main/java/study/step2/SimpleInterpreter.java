@@ -17,7 +17,7 @@ public class SimpleInterpreter implements Interpreter {
     @Override
     public Expression read(String input) {
         validation(input);
-        return toExpression(partitionIntoNumberAndOperator(input));
+        return toExpression(partitionIntoNumberAndOperator(input.trim()));
     }
 
     private void validation(String input) {

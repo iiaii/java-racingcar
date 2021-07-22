@@ -3,6 +3,7 @@ package study.step2;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import static study.step2.Exception.*;
 
@@ -10,7 +11,7 @@ public class SimpleCalculator implements Calculator {
 
     private final Interpreter interpreter;
     private final List<Integer> numbers;
-    private final LinkedList<Operator> operators;
+    private final Queue<Operator> operators;
 
     public SimpleCalculator(Interpreter interpreter) {
         this.interpreter = interpreter;
@@ -42,7 +43,6 @@ public class SimpleCalculator implements Calculator {
     }
 
     private int calculate(Integer a, Integer b) {
-        OPERATOR_SHORTAGE.validation(operators, OPERATOR_SHORTAGE.getMessage());
         return operators.poll().calculate(a, b);
     }
 

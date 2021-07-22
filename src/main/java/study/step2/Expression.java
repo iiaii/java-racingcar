@@ -1,8 +1,10 @@
 package study.step2;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
+import static study.step2.Exception.NUMBER_SHORTAGE;
 
 public class Expression {
 
@@ -10,8 +12,13 @@ public class Expression {
     private final List<Operator> operators;
 
     public Expression(List<Integer> numbers, List<Operator> operators) {
+        NUMBER_SHORTAGE.validation(isValidExpression(numbers, operators), NUMBER_SHORTAGE.getMessage());
         this.numbers = numbers;
         this.operators = operators;
+    }
+
+    private boolean isValidExpression(List<Integer> numbers, List<Operator> operators) {
+        return numbers.size() == operators.size() + 1;
     }
 
     public void addNumber(int number) {
@@ -23,7 +30,7 @@ public class Expression {
     }
 
     public List<Integer> getNumbers() {
-        return new ArrayList<>(numbers);
+        return Collections.unmodifiableList(numbers);
     }
 
     public LinkedList<Operator> getOperator() {

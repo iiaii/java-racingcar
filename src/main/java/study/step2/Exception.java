@@ -1,6 +1,7 @@
 package study.step2;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
@@ -20,8 +21,8 @@ public enum Exception {
             throw new IllegalArgumentException(message);
         }
     }),
-    OPERATOR_SHORTAGE("수식에서 연산자가 부족합니다", (LinkedList<Operator> operators, String message) -> {
-        if (operators.isEmpty()) {
+    NUMBER_SHORTAGE("수식에서 숫자가 부족합니다", (Boolean isValidExpression, String message) -> {
+        if (!isValidExpression) {
             throw new IllegalArgumentException(message);
         }
     });

@@ -5,8 +5,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static study.step2.Exception.*;
 
 public class InterpreterTest {
 
@@ -17,7 +19,7 @@ public class InterpreterTest {
     public void nullInput() {
         // given
         String input = null;
-        String message = Exception.NULL_INPUT.getMessage();
+        String message = NULL_INPUT.getMessage();
 
         // when
         ThrowingCallable throwingCallable = () -> interpreter.read(input);
@@ -33,7 +35,7 @@ public class InterpreterTest {
     public void emptyInput() {
         // given
         String input = "";
-        String message = Exception.BLANK_INPUT.getMessage();
+        String message = BLANK_INPUT.getMessage();
 
         // when
         ThrowingCallable throwingCallable = () -> interpreter.read(input);
@@ -63,7 +65,22 @@ public class InterpreterTest {
     @CsvSource(value = {"7 ^ 3:^", "1 ! 2:!", "4 ( 0:(", "8 - 0 # 5 + 2:#"}, delimiter = ':')
     public void notOperator(String input, String operator) {
         // given
-        String message = Exception.NOT_OPERATOR.getMessage(operator);
+        String message = NOT_OPERATOR.getMessage(operator);
+
+        // when
+        ThrowingCallable throwingCallable = () -> interpreter.read(input);
+
+        // then
+        assertThatThrownBy(throwingCallable)
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(message);
+    }
+
+    @ParameterizedTest(name = "수식 마지막에 숫자가 한개 부족한 경우 경우 경우 | {arguments}")
+    @ValueSource(strings = {"3 - 1 +", "1 - 2 + 3 *"})
+    public void numberShortage(String input) {
+        // given
+        String message = NUMBER_SHORTAGE.getMessage();
 
         // when
         ThrowingCallable throwingCallable = () -> interpreter.read(input);

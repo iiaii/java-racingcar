@@ -5,12 +5,16 @@ import java.util.Map;
 import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
-public enum Operator {
-    ADD("+", (a, b) -> a + b),
-    SUBTRACT("-", (a, b) -> a - b),
-    MULTIPLY("*", (a, b) -> a * b),
-    DIVIDE("/", (a, b) -> a / b);
+import static study.step2.Exception.NOT_OPERATOR;
 
+public enum Operator {
+    ADD("+", Math::addExact),
+    SUBTRACT("-", Math::subtractExact),
+    MULTIPLY("*", Math::multiplyExact),
+    DIVIDE("/", Math::floorDiv);
+
+    private static final Map<String, Operator> operatorMap = Arrays.stream(Operator.values())
+            .collect(Collectors.toMap(Operator::getSymbol, operator -> operator));
     private final String symbol;
     private final BinaryOperator<Integer> operator;
 
@@ -27,8 +31,9 @@ public enum Operator {
         return operator.apply(a, b);
     }
 
-    public static Map<String, Operator> getOperatorMap() {
-        return Arrays.stream(Operator.values())
-                .collect(Collectors.toMap(Operator::getSymbol, operator -> operator));
+    public static Operator getOrThrow(String text) {
+        Operator operator = operatorMap.get(text);
+        NOT_OPERATOR.validation(operator, NOT_OPERATOR.getMessage(text));
+        return operator;
     }
 }

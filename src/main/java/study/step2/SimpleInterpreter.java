@@ -13,11 +13,6 @@ public class SimpleInterpreter implements Interpreter {
 
     private static final String DELIMITER = " ";
     private static final boolean IS_NUMERIC = true;
-    private final Map<String, Operator> operatorMap;
-
-    public SimpleInterpreter() {
-        this.operatorMap = Operator.getOperatorMap();
-    }
 
     @Override
     public Expression read(String input) {
@@ -52,19 +47,13 @@ public class SimpleInterpreter implements Interpreter {
 
     private List<Operator> getOperators(Map<Boolean, List<String>> partition) throws IllegalArgumentException {
         return partition.get(!IS_NUMERIC).stream()
-                .map(this::getOperatorOrThrow)
+                .map(Operator::getOrThrow)
                 .collect(Collectors.toList());
     }
 
     private Integer getNumberOrThrow(String text) {
         return Optional.of(Integer.parseInt(text))
                 .orElseThrow(() -> new NumberFormatException(text));
-    }
-
-    private Operator getOperatorOrThrow(String text) {
-        Operator operator = operatorMap.get(text);
-        NOT_OPERATOR.validation(operator, NOT_OPERATOR.getMessage(text));
-        return operator;
     }
 
 }
